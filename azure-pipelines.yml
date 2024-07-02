@@ -28,3 +28,11 @@ steps:
     serviceConnectionEndpoint: 'Deepak Lohar'
     testType: 'code'
     failOnIssues: true
+- task: SnykSecurityScan@1
+  inputs:
+    serviceConnectionEndpoint: 'Deepak Lohar'
+    testType: 'container'
+    dockerImageName: 'hellocd'
+    dockerfilePath: 'Dockerfile'
+    monitorWhen: 'always'
+    failOnIssues: true
