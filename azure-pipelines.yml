@@ -28,6 +28,7 @@ steps:
     serviceConnectionEndpoint: 'Deepak Lohar'
     testType: 'code'
     failOnIssues: true
+  
 - task: SnykSecurityScan@1
   inputs:
     serviceConnectionEndpoint: 'Deepak Lohar'
