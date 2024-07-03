@@ -11,29 +11,29 @@ pool:
   demands:
   - agent.name -equals Deepaks-MacBook-Pro
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: 'default'
-    jdkArchitectureOption: 'ARM64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+stages:
+  - stage: Maven
+    jobs:
+      - job: Maven
+        steps:
+        - task: Maven@3
+          inputs:
+              mavenPomFile: 'pom.xml'
+              mavenOptions: '-Xmx3072m'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: 'default'
+              jdkArchitectureOption: x64
+              publishJUnitResults: true
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              goals: 'package'
 
-- task: SnykSecurityScan@1
-  inputs:
-    serviceConnectionEndpoint: 'Deepak Lohar'
-    testType: 'code'
-    failOnIssues: true
-  
-- task: SnykSecurityScan@1
-  inputs:
-    serviceConnectionEndpoint: 'Deepak Lohar'
-    testType: 'container'
-    dockerImageName: 'deepaklohar/hellocd:1.0.0'
-    dockerfilePath: 'Dockerfile'
-    monitorWhen: 'always'
-    failOnIssues: true
+  - stage: SAST
+    jobs:
+      - job: SAST
+        steps:
+        - task: SnykSecurityScan@1
+          inputs:
+            serviceConnectionEndpoint: 'Deepak Lohar'
+            testType: 'code'
+            failOnIssues: true
+
