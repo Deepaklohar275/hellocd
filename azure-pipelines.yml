@@ -7,9 +7,15 @@ trigger:
 - main
 
 pool:
-  name: 'Default'
-  demands:
-  - agent.name -equals Deepaks-MacBook-Pro
+  vmImage: ubuntu-latest
+
+
+resources:
+  repositories:
+  - repository: self
+    type: git
+    name: Deepaklohar275/hellocd
+    ref: main
 
 stages:
   - stage: Maven
@@ -36,4 +42,13 @@ stages:
             serviceConnectionEndpoint: 'Deepak Lohar'
             testType: 'code'
             failOnIssues: true
+        - task: SnykSecurityScan@1
+          inputs:
+                serviceConnectionEndpoint: 'Deepak Lohar'
+                testType: 'container'
+                dockerImageName: '1.0.0'
+                dockerfilePath: 'Dockerfile'
+                monitorWhen: 'always'
+                failOnIssues: true
+
 
