@@ -36,6 +36,7 @@ stages:
   - stage: SAST
     jobs:
       - job: SAST
+        dependsOn:
         steps:
         - task: SnykSecurityScan@1
           inputs:
