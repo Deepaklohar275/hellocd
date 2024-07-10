@@ -48,7 +48,7 @@ stages:
           inputs:
                 serviceConnectionEndpoint: 'Deepak Lohar'
                 testType: 'container'
-                dockerImageName: '1.0.0'
+                dockerImageName: 'deepaklohar/hellocd:1.0.0'
                 dockerfilePath: 'Dockerfile'
                 monitorWhen: 'always'
                 failOnIssues: true
