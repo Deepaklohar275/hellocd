@@ -13,7 +13,7 @@ COPY . .
 RUN mvn package -DskipTests
 
 # Expose the port
-EXPOSE 8080
+EXP
 
 # Command to run the application
 CMD ["java", "-jar", "target/hellocd-0.0.1-SNAPSHOT.jar"]
