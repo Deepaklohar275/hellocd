@@ -19,7 +19,8 @@ stages:
           
           - script: | 
               echo $PATH
-              condition: always()
+            condition: always()
+            displayName: path
               set +e
     
           - script: |
@@ -28,6 +29,6 @@ stages:
             displayName: sast
             
           - script: |
-              snyk test --all-projects --detection-depth=4
+              snyk test  --detection-depth=4
             condition: always()
             displayName: sca
