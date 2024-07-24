@@ -1,54 +1,33 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 
 pool:
   vmImage: ubuntu-latest
-
-
-resources:
-  repositories:
-  - repository: self
-    type: git
-    name: Deepaklohar275/hellocd
-    ref: main
-
+  
 stages:
-  - stage: Maven
+  - stage: Install
     jobs:
-      - job: Maven
+      - job: Install
         steps:
-        - task: Maven@3
-          inputs:
-              mavenPomFile: 'pom.xml'
-              mavenOptions: '-Xmx3072m'
-              javaHomeOption: 'JDKVersion'
-              jdkVersionOption: 'default'
-              jdkArchitectureOption: x64
-              publishJUnitResults: true
-              testResultsFiles: '**/surefire-reports/TEST-*.xml'
-              goals: 'package'
-
-  - stage: SAST
-    dependsOn: []
-    jobs:
-      - job: SAST
-        
-        steps:
-        - task: SnykSecurityScan@1
-          inputs:
-            serviceConnectionEndpoint: 'Deepak Lohar'
-            testType: 'code'
-            failOnIssues: true
-        - task: SnykSecurityScan@1
-          inputs:
-                serviceConnectionEndpoint: 'Deepak Lohar'
-                testType: 'container'
-                dockerImageName: 'deepaklohar/hellocd:1.0.0'
-                dockerfilePath: 'Dockerfile'
-                monitorWhen: 'always'
-                failOnIssues: true
-
-
+          - script: |
+              npm install -g snyk snyk-to-html
+              mkdir -p html
+              snyk --version
+            condition: always()
+          
+          - script: |
+              snyk auth 173f3477-cac0-44a8-a51d-0337b7f37003
+            condition: always()
+          
+          - script: | 
+              echo $PATH
+              condition: always()
+              set +e
+    
+          - script: |
+              snyk code test
+            condition: always()
+            displayName: sast
+            
+          - script: |
+              snyk test --all-projects --detection-depth=4
+            condition: always()
+            displayName: sca
