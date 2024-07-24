@@ -29,6 +29,7 @@ stages:
             displayName: sast
             
           - script: |
+              dotnet restore
               snyk test  --detection-depth=4
             condition: always()
             displayName: sca
